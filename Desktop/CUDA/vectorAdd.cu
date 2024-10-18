@@ -1,10 +1,10 @@
 #include <stdio.h>
 
-void initWith(float num, float *a, int N) {
+/*__global__ gpu에서 먼저실행하려면 3줄추가하고 global로 변경한다*/ void initWith(float num, float *a, int N) {
     for (int i = 0; i < N; ++i) {  
         a[i] = num;
     }
-}
+}벡
 
 __global__ void addVectorsInto(float *result, float *a, float *b, int N) {
     int index = threadIdx.x + blockIdx.x * blockDim.x;   
@@ -29,7 +29,7 @@ void checkElementsAre(float target, float *vector, int N){
 }
 
 int main(){
-    const int N = 2<<24; // N은 2^24 크기의 벡터를 의미(스칼라값 2^24)
+    const int N = 2<<24; // N은 2^24 크기의 터를 의미(스칼라값 2^24)
     size_t size = N * sizeof(float);
 
     float *a;
@@ -40,9 +40,9 @@ int main(){
     cudaMallocManaged(&b, size);
     cudaMallocManaged(&c, size);
 
-threadsPerBlock = 256;
-numberOfBlocks = 32 * numberOfSMs;
-printf("블록으로 설정된 총 개수: %d\n", numberOfBlocks);
+    threadsPerBlock = 256;
+    numberOfBlocks = 32 * numberOfSMs;
+    printf("블록으로 설정된 총 개수: %d\n", numberOfBlocks);
 
 // a,b,c 벡터 초기화
     initWith(3, a, N);
@@ -58,15 +58,13 @@ printf("블록으로 설정된 총 개수: %d\n", numberOfBlocks);
     // numberOfBlocks = 1;
     // printf("블록으로 설정된 총 개수: %d\n", numberOfBlocks);
 
-
 //초기화 작업을 GPU에서 먼저 하는 경우
-// initWith<<<numberOfBlocks, threadsPerBlock>>>(3, a, N);
-// initWith<<<numberOfBlocks, threadsPerBlock>>>(4, b, N);
-// initWith<<<numberOfBlocks, threadsPerBlock>>>(0, c, N);
-// cudaDeviceSynchronize();
+    // initWith<<<numberOfBlocks, threadsPerBlock>>>(3, a, N);
+    // initWith<<<numberOfBlocks, threadsPerBlock>>>(4, b, N);
+    // initWith<<<numberOfBlocks, threadsPerBlock>>>(0, c, N);
 
-cudaDeviceSynchronize();
 
+    // cudaDeviceSynchronize();
 
     cudaError_t addVectorsErr;
     cudaError_t asyncErr;
