@@ -7,7 +7,7 @@ __global__ void GPUFunction(){
 }
 
 void CPUFunction(){
-    printf("CPUFunction")
+    printf("CPUFunction");
 }
 
 int main(){
